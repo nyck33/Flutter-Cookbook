@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import '../plan_provider.dart';
 
 class PlanScreen extends StatefulWidget {
-  final Plan plan;
-  const PlanScreen({Key key, this.plan}) : super(key: key);
+  final Plan? plan;
+  const PlanScreen({Key? key, this.plan}) : super(key: key);
   @override
   State createState() => _PlanScreenState();
 }
 
 class _PlanScreenState extends State<PlanScreen> {
-  ScrollController scrollController;
-  Plan get plan => widget.plan;
+  ScrollController? scrollController;
+  Plan? get plan => widget.plan;
   @override
   void initState() {
     super.initState();
@@ -25,18 +25,25 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     // final plan = PlanProvider.of(context);
-    return Scaffold(
-        appBar: AppBar(title: Text('Master Plan')),
-        body: Column(children: <Widget>[
-          Expanded(child: _buildList()),
-          SafeArea(child: Text(plan.completenessMessage))
-        ]),
-        floatingActionButton: _buildAddTaskButton());
+    return WillPopScope(
+        onWillPop: (){
+          final controller = PlanProvider.of(context);
+          controller.savePlan(plan!);
+          return Future.value(true);
+        },
+      child: Scaffold(
+          appBar: AppBar(title: Text('Master Plan')),
+          body: Column(children: <Widget>[
+            Expanded(child: _buildList()),
+            SafeArea(child: Text(plan!.completenessMessage))
+          ]),
+          floatingActionButton: _buildAddTaskButton()),
+    );
   }
 
   @override
   void dispose() {
-    scrollController.dispose();
+    scrollController!.dispose();
     super.dispose();
   }
 
@@ -46,7 +53,7 @@ class _PlanScreenState extends State<PlanScreen> {
       child: Icon(Icons.add),
       onPressed: () {
         final controller = PlanProvider.of(context);
-        controller.createNewTask(plan);
+        controller.createNewTask(plan!);
         setState(() {});
       },
     );
@@ -56,8 +63,8 @@ class _PlanScreenState extends State<PlanScreen> {
     //final plan = PlanProvider.of(context);
     return ListView.builder(
       controller: scrollController,
-      itemCount: plan.tasks.length,
-      itemBuilder: (context, index) => _buildTaskTile(plan.tasks[index]),
+      itemCount: plan!.tasks.length,
+      itemBuilder: (context, index) => _buildTaskTile(plan!.tasks[index]),
     );
   }
 
@@ -68,7 +75,7 @@ class _PlanScreenState extends State<PlanScreen> {
       direction: DismissDirection.endToStart,
       onDismissed: (_) {
         final controller = PlanProvider.of(context);
-        controller.deleteTask(plan, task);
+        controller.deleteTask(plan!, task);
         setState(() {});
       },
       child: ListTile(

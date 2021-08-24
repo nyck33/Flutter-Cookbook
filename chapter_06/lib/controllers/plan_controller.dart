@@ -23,7 +23,7 @@ class PlanController {
     services.delete(plan);
   }
 
-  void createNewTask(Plan plan, [String description]) {
+  void createNewTask(Plan plan, [String? description]) {
     if (description == null || description.isEmpty) {
       description = 'New Task';
     }
@@ -38,8 +38,8 @@ class PlanController {
     services.deleteTask(plan, task);
   }
 
-  String _checkForDuplicates(Iterable<String> items, String text) {
-    final duplicatedCount = items.where((item) => item.contains(text)).length;
+  String _checkForDuplicates(Iterable<String?> items, String text) {
+    final duplicatedCount = items.where((item) => item!.contains(text)).length;
     if (duplicatedCount > 0) {
       text += ' ${duplicatedCount + 1}';
     }

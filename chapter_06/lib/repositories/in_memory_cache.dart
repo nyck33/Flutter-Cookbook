@@ -15,7 +15,7 @@ class InMemoryCache implements Repository {
   }
 
   @override
-  Model get(int id) {
+  Model? get(int id) {
     return _storage[id];
   }
 

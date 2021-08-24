@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 
 class Task {
   final int id;
-  String description;
-  bool complete;
+  String? description;
+  bool? complete;
 
   Task({
-    @required this.id,
+    required this.id,
     this.complete = false,
     this.description = '',
   });

@@ -4,10 +4,10 @@ import './task.dart';
 
 class Plan {
   final int id;
-  String name = '';
+  String? name = '';
   List<Task> tasks = [];
 
-  Plan({@required this.id, this.name = ''});
+  Plan({required this.id, this.name = ''});
 
   Plan.fromModel(Model model)
       : id = model.id,
@@ -22,7 +22,7 @@ class Plan {
         'tasks': tasks.map((task) => task.toModel()).toList()
       });
 
-  int get completeCount => tasks.where((task) => task.complete).length;
+  int get completeCount => tasks.where((task) => task.complete!).length;
 
   String get completenessMessage =>
       '$completeCount out of ${tasks.length} tasks';
